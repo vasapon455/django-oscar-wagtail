@@ -2,7 +2,7 @@ import json
 
 from django.contrib.contenttypes.models import ContentType
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from oscar.core.loading import get_model
 from wagtail.admin.widgets import AdminChooser
 
@@ -14,7 +14,7 @@ class AdminProductChooser(AdminChooser):
     link_to_chosen_text = _('Edit this product')
 
     def __init__(self, **kwargs):
-        super(AdminProductChooser, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         Product = get_model('catalogue', 'Product')
         self.target_content_type = ContentType.objects.get_for_model(Product)
 
@@ -22,7 +22,7 @@ class AdminProductChooser(AdminChooser):
         model_class = self.target_content_type.model_class()
         instance, value = self.get_instance_and_id(model_class, value)
 
-        original_field_html = super(AdminProductChooser, self).render_html(
+        original_field_html = super().render_html(
             name, value, attrs)
 
         return render_to_string("oscar_wagtail/widgets/product_chooser.html", {

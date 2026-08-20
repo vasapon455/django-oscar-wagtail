@@ -1,13 +1,13 @@
-from django.conf.urls import url
+from django.urls import path
 
 from oscar_wagtail import views
 
 app_name = 'oscar_wagtail'
 
 urlpatterns = [
-    url(r'^product-choose/$',
+    path('product-choose/',
         views.product_choose, name='product_choose'),
 
-    url(r'^product-choose/(\d+)/$',
+    path('product-choose/<int:pk>/',
         views.product_chosen, name='product_chosen'),
 ]

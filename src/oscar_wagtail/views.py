@@ -4,9 +4,8 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from django.utils.six import text_type
 from oscar.core.loading import get_model
-from wagtail.admin.forms import SearchForm
+from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.modal_workflow import render_modal_workflow
 
 Product = get_model('catalogue', 'Product')
@@ -49,28 +48,28 @@ def product_choose(request):
     return render_modal_workflow(
         request,
         'oscar_wagtail/chooser/product_choose.html',
-        'oscar_wagtail/chooser/product_choose.js',
-        {
+        template_vars={
             'items': paginated_items,
             'searchform': searchform,
-        }
+        },
+        json_data={'step': 'choose'},
     )
 
 
 def product_chosen(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
-    product_json = json.dumps({
-        'id': product.pk,
-        'string': text_type(product),
-        'edit_link': reverse(
-            'dashboard:catalogue-product', kwargs={'pk': product.pk})
-    })
-
     return render_modal_workflow(
         request,
-        None, 'oscar_wagtail/chooser/product_chosen.js',
-        {
-            'product_json': product_json,
-        }
+        None,
+        template_vars={},
+        json_data={
+            'step': 'chosen',
+            'result': {
+                'id': product.pk,
+                'string': str(product),
+                'edit_link': reverse(
+                    'dashboard:catalogue-product', kwargs={'pk': product.pk}),
+            },
+        },
     )

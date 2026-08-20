@@ -1,18 +1,16 @@
 from django.utils.html import escape
-from wagtail.admin.edit_handlers import BaseChooserPanel
-from wagtail.core.models import Page
-from wagtail.core.rich_text.pages import PageLinkHandler as _PageLinkHandler
+from wagtail.admin.panels import FieldPanel
+from wagtail.models import Page
+from wagtail.rich_text.pages import PageLinkHandler as _PageLinkHandler
 
 from oscar_wagtail import widgets
 
 
-class ProductChooserPanel(BaseChooserPanel):
-    object_type_name = "product"
+class ProductChooserPanel(FieldPanel):
+    """Custom panel that renders the product chooser widget."""
 
-    _target_content_type = None
-
-    def __init__(self, field_name, product_type=None):
-        super().__init__(field_name)
+    def __init__(self, field_name, product_type=None, **kwargs):
+        super().__init__(field_name, **kwargs)
         self.product_type = product_type
 
     def clone(self):
@@ -30,18 +28,12 @@ class ProductChooserPanel(BaseChooserPanel):
 class PageLinkHandler(_PageLinkHandler):
     """Override the default PageLinkHandler to make sure we use the url
     property of the `Category` classes.
-
     """
 
-    @staticmethod
-    def expand_db_attributes(attrs, for_editor):
+    @classmethod
+    def expand_db_attributes(cls, attrs):
         try:
             page = Page.objects.get(id=attrs['id']).specific
-            if for_editor:
-                editor_attrs = 'data-linktype="page" data-id="%d" ' % page.id
-            else:
-                editor_attrs = ''
-
-            return '<a %shref="%s">' % (editor_attrs, escape(page.url))
+            return '<a href="%s">' % escape(page.url)
         except Page.DoesNotExist:
             return "<a>"

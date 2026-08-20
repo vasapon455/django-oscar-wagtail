@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
     'modelcluster',
     'taggit',
 
@@ -77,12 +77,11 @@ TEMPLATES = [
 ]
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
 )
@@ -92,7 +91,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-HAYSTACK_CONNECTIONS = {'default': {'ENGINE': 'haystack.backends.simple_backend.SimpleEngine'}}
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 ROOT_URLCONF = 'tests.project.urls'
 LOGIN_REDIRECT_URL = '/accounts/'
@@ -101,13 +99,10 @@ DEBUG = False
 SITE_ID = 1
 USE_TZ = 1
 APPEND_SLASH = True
-DDF_DEFAULT_DATA_FIXTURE = 'tests.dynamic_fixtures.OscarDynamicDataFixtureClass'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 LANGUAGE_CODE = 'en-gb'
 
 
-# temporary workaround for issue in sorl-thumbnail in Python 3
-# https://github.com/mariocesar/sorl-thumbnail/pull/254
 THUMBNAIL_DEBUG = False,
 
 OSCAR_INITIAL_ORDER_STATUS = 'A'

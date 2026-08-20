@@ -1,11 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from oscar.core.loading import get_class
-from wagtail.admin.edit_handlers import (
-    FieldPanel, PublishingPanel, RichTextFieldPanel)
-from wagtail.core.fields import RichTextField
-from wagtail.core.models import Page
+from wagtail.admin.panels import FieldPanel, PublishingPanel
+from wagtail.fields import RichTextField
+from wagtail.models import Page
 
 
 class AbstractCategory(Page):
@@ -19,7 +18,7 @@ class AbstractCategory(Page):
     content_panels = [
         FieldPanel('title'),
         FieldPanel('name'),
-        RichTextFieldPanel('description'),
+        FieldPanel('description'),
     ]
 
     settings_panels = [
@@ -32,7 +31,7 @@ class AbstractCategory(Page):
     def save(self, *args, **kwargs):
         if not self.name:
             self.name = self.title
-        return super(AbstractCategory, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
     def serve(self, request, *args, **kwargs):
         cls = get_class('catalogue.views', 'CatalogueView')

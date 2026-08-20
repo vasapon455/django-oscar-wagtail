@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.html import format_html
 from wagtail.admin.menu import MenuItem
-from wagtail.core import hooks
+from wagtail import hooks
 
 from oscar_wagtail.edit_handlers import PageLinkHandler
 
@@ -24,7 +24,7 @@ def editor_js():
 def register_frank_menu_item():
     return MenuItem(
         'Oscar', reverse('dashboard:index'),
-        classnames='icon icon-cogs', order=10000)
+        classname='icon icon-cogs', order=10000)
 
 
 @hooks.register('register_rich_text_link_handler')
